@@ -1,0 +1,175 @@
+% This creates a document based on the AMS
+% (American Mathematical Society) article style.
+\documentclass[oneside,12pt]{amsart}
+
+% This package simply sets the margins to be 1.00 inch.
+% If you prefer 1.25 in margins change the value.
+% If you look up the documentation for the geometry package
+% you can find out how to control the size of all four margins
+% independently of each other.
+\usepackage[margin=1.00in]{geometry}
+
+% These packages include nice commands from AMS-LaTeX
+% AMS-LaTeX has lots of nice equation environment that are better
+% than the plan LaTeX options.
+\usepackage{amssymb,amsmath,amsthm, enumitem, bm, graphicx, mathrsfs, bbm}
+
+% Make the space between lines slightly more
+% generous than normal single spacing, but compensate
+% so that the spacing between rows of matrices still
+% looks normal.  Note that 1.1=1/.9090909...
+\renewcommand{\baselinestretch}{1.1}
+\renewcommand{\arraystretch}{.91}
+% If you want even more space between lines try
+% \renewcommand{\baselinestretch}{1.5}
+% \renewcommand{\arraystretch}{0.67}
+
+% Define a new environment for exercises.
+\newenvironment{exercise}[1]{\vspace{.1in}\noindent\textbf{Exercise #1 }}{}
+
+% Define shortcut commands for commonly used symbols.
+\newcommand{\R}{\mathbb{R}} % Real numbers
+\newcommand{\C}{\mathbb{C}} % Complex numbers
+\newcommand{\Z}{\mathbb{Z}} % Integers
+\newcommand{\Q}{\mathbb{Q}} % Rational numbers
+\newcommand{\N}{\mathbb{N}} % Natural numbers
+\newcommand{\calP}{\mathcal{P}} % Calligraphic P for power set
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\F}{\mathbb{F}} % Field
+\newcommand{\E}{\mathbb{E}} % Expected Value
+
+\newcommand{\unif}{\text{Uniform}} 
+\newcommand{\normaldist}{\mathcal{N}} 
+\newcommand{\gammadist}{\text{Gamma}} 
+\newcommand{\empirical}{\text{Emp}} 
+\newcommand{\argmax}{\text{ArgMax}} 
+\newcommand{\argmin}{\text{ArgMin}} 
+\newcommand{\pdf}{f} 
+\newcommand{\given}{|} 
+\newcommand{\KL}{\mathbb{KL}} 
+
+% vectors and subspaces
+\renewcommand{\vec}[1]{{\ensuremath{\bm{#1}}}}
+\newcommand{\0}{{\vec  0 }}
+\newcommand{\1}{{\mathbbm{  1} }}
+\newcommand{\J}{{\vec  J }}
+\renewcommand{\a}{{\vec  a }}
+\renewcommand{\b}{{\vec  b }}
+\renewcommand{\c}{{\vec  c }}
+\renewcommand{\d}{{\vec  d }}
+\newcommand{\e}{{\vec  e }}
+\newcommand{\f}{{\vec  f }}
+\newcommand{\g}{{\vec  g }}
+\newcommand{\h}{{\vec  h }}
+\renewcommand{\k}{{\vec  k }}
+\renewcommand{\l}{{\boldsymbol{\ell} }}  % lowercase l looks too much like 1.  
+\newcommand{\m}{{\vec  m }}
+\newcommand{\p}{{\vec  p }}
+\newcommand{\q}{{\vec  q }}
+\renewcommand{\r}{{\vec  r }}
+\newcommand{\s}{{\vec  s }}
+\renewcommand{\t}{{\vec  t }}
+\let\uaccent\u
+\renewcommand{\u}{{\vec  u }}
+\let\vaccent\v
+\renewcommand{\v}{{\vec  v }}
+\newcommand{\w}{{\vec  w }}
+\newcommand{\x}{{\vec  x }}
+\newcommand{\y}{{\vec  y }}
+\newcommand{\z}{{\vec  z }}
+\newcommand{\bZ}{{\vec{Z}}}
+\newcommand{\X}{{\mathbb{X}}}
+\renewcommand{\L}{{\mathscr{L}}}
+
+% Define a function called "span" that would be useful in linear algebra.
+\DeclareMathOperator{\vsspan}{span}
+
+% Define functions for the real and imaginary parts of a complex number.
+% These could be used in place of the built in commands \Re and \Im,
+% which print Re and Im in a font that some people don't like.
+\DeclareMathOperator{\re}{Re}
+\DeclareMathOperator{\im}{Im}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+    
+    % If you use Overleaf, the name of the project will be determined by
+    % what you enter as the document title.
+    \title{Vol 4 Project }
+    
+    \begin{center}
+        \textsf{Problem Statement and Solution Ideas}
+    \end{center}
+    
+    Group Members:
+    Dallan Olsen, Laren Edwards, Riley Gabrielson, Calix Barrus
+    
+    \section{Premise}
+    Our foundation is a robot with 4 independent wheels, and our goal is to solve optimal avoidance paths using the 4 wheels as our control. We feel that this extension to the standard object avoidance problem provides more direct application to real world robotics problems.
+    
+    \section{Cost Function}
+    We have for our cost functional the equation 
+    J[u] =0tfc1 ds+ 0tfc2(x''2 + y''2) + c3 C(x, y)dt +c4tf 
+    Where C(x,y) is given as in the Obstacle avoidance lab. This cost functional allows us to penalize time, path length, acceleration, as well as the ability to impose a stiff penalty for colliding with (or getting too close to) the obstacle. 
+    
+    \section{State Equations}
+    The evolution of our state is given by
+    
+    \begin{align*}
+        \vec{x}’ = H \begin{bmatrix} x \\ y \\ \theta \\ x' \\ y' \\ \theta' \end{bmatrix}   + F \begin{bmatrix} 0 \\ 0 \\ 0 \\  \vec{\phi}(\vec{u})  \end{bmatrix} \\
+    \vec{x}(t_f) = [x_f, y_f, \ldots]^T
+    \end{align*}
+    
+    Where 
+    \begin{align*}
+        H = 
+        \begin{bmatrix} 
+            0 & 0 & 0 & 1 & 0 & 0\\  
+            0 & 0 & 0 & 0 & 1 & 0\\  
+            0 & 0 & 0 & 0 & 0 & 1\\  
+            0 & 0 & 0 & 0 & 0 & 0\\  
+            0 & 0 & 0 & 0 & 0 & 0\\  
+            0 & 0 & 0 & 0 & 0 & 0\\  
+        \end{bmatrix},
+    F =
+    \begin{bmatrix} 
+        0 & 0 & 0 & 0 & 0 & 0 \\  
+        0 & 0 & 0 & 0 & 0 & 0 \\  
+        0 & 0 & 0 & 0 & 0 & 0 \\  
+        0 & 0 & 0 & 1 & 0 & 0 \\  
+        0 & 0 & 0 & 0 & 1 & 0 \\  
+        0 & 0 & 0 & 0 & 0 & 1 \\  
+    \end{bmatrix} 
+    \end{align*}
+    
+    This basically states that first derivatives are related to themselves and the second derivatives are controlled by the control variable. 
+    
+    The phi function is a result of solving the equation of motion, and describes how the 4 controls (motors 1,2,3,4) influence x’, y’, and theta’. In order to solve this problem with LQR, we may need to linearize phi.
+    
+    \section{Plan to Solve}
+    \begin{enumerate}[label=\roman*.]
+        \item Derive and solve equations of motion to get $\phi$.
+        \item Solve for optimal path using LQR or a numerical scheme. This will involve making coming up with the LQR equations and solving for the optimal path.
+        \item Come up with jupyter code and plots of states and controls.
+        \item Plug situation into physics engine.
+        \begin{enumerate}[label=\alph*.]
+            \item Use PID to stick to optimal path in engine.
+        \end{enumerate}
+        \item Attempt recreate simulation with physical robots.
+        \begin{enumerate}[label=\alph*.]
+            \item Work out how the sensors work and getting them to feed info to our code. 
+        \end{enumerate}
+    \end{enumerate}
+    
+    
+    
+    %---------------------------------
+    % Don't change anything below here
+    %---------------------------------
+    
+    
+\end{document}
